@@ -1,1 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Battery Experience</title>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
+<style>
+/* 🌌 BASE */
+body {
+  margin:0;
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at 20% 20%, #0f1a4a, #050814 70%);
+  color:white;
+  overflow-x:hidden;
+}
+
+/* ✨ GLASS STYLE */
+.glass {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+}
+
+.section { height:100vh; position:relative; }
+
+/* HERO */
+.hero {
+  display:flex;
+  align-items:center;
+  background: linear-gradient(to right, #050814 30%, transparent 70%), url("image2.png") right center/cover no-repeat;
+}
+
+.hero-text {
+  margin-left:8%;
+  font-size:3rem;
+  opacity:0;
+  background: linear-gradient(90deg,#fff,#9ecbff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* 3D */
+model-viewer { width:100%; height:100%; opacity:0; }
+
+/* 🚗 CAR GROUP - Fixed: autoAlpha:0 and visibility:hidden */
+.car-group {
+  position:fixed;
+  bottom:10%;
+  right:-350px;
+  width:280px;
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6));
+  visibility: hidden; 
+  opacity: 0;
+}
+
+.car { width:100%; }
+
+.fly {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%) scale(0.2);
+  width:160px;
+  opacity:0;
+  filter: drop-shadow(0 0 20px rgba(0,150,255,0.7));
+}
+
+/* TEXT */
+.text {
+  position:fixed;
+  right:5%;
+  top:40%;
+  max-width:400px;
+  opacity:0;
+  transform:translateX(120px);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.text h1 {
+  font-size:3rem;
+  background: linear-gradient(90deg,#fff,#00d4ff);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+/* 🧱 CONTENT SECTION */
+.info-section { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:60px 10%; }
+.info-container { display:flex; gap:50px; align-items:center; max-width:1200px; }
+.info-img { width:400px; border-radius:20px; overflow:hidden; }
+.info-text { flex:1; padding:30px; }
+.info-text h2 { font-size:2.5rem; margin-bottom:10px; }
+.info-text p { opacity:0.8; line-height:1.6; }
+
+/* FINAL */
+.final { display:flex; flex-direction:column; justify-content:center; align-items:center; }
+button {
+  margin-top:20px; padding:14px 40px; border:none; border-radius:30px;
+  background: linear-gradient(90deg,#00d4ff,#6a5cff); color:white;
+  font-weight:bold; cursor:pointer; transition:0.3s;
+}
+
+@media(max-width:900px){ .info-container { flex-direction:column; } .info-img {width:100%;} }
+</style>
+</head>
+
+<body>
+
+<section class="section hero"><div class="hero-text">Battery is energy</div></section>
+
+<section class="section" id="modelSection">
+  <model-viewer id="model" src="3d.glb" camera-controls auto-rotate></model-viewer>
+</section>
+
+<section class="section" id="triggerPoint"></section>
+<section class="section"></section>
+
+<div class="car-group" id="carGroup">
+  <img src="https://cdn-icons-png.flaticon.com/512/743/743922.png" class="car">
+  <img src="image1.png" class="fly" id="fly">
+</div>
+
+<div class="text glass" id="text">
+  <h1>Solar-powered</h1>
+  <p>Clean renewable energy powering the future with efficiency and sustainability.</p>
+</div>
+
+<section class="info-section">
+  <div class="info-container glass">
+    <img src="image1.png" class="info-img">
+    <div class="info-text">
+      <h2>创作目的</h2>
+      <p>- 推广可持续旅游
+借助太阳能驱动，展示绿色能源在未来旅游中的应用，呼应环保与低碳生活。
+- 弘扬国家文化
+以马来西亚国花——木槿花为设计元素，体现民族特色与文化自豪感。
+- 创新科学教育
+通过光影投射、传感器应用、再生材料的巧妙应用 / 材料再利用等科学原理，激发公众尤其是青少年的科学兴趣。
+- 提升旅游体验
+将旅居舱设计为可供游客短期居住的移动空间，结合舒适与科技，打造独特的旅游体验。
+- 呼应“马来西亚2026旅游年”
+作品不仅是科学项目，更是宣传载体，向世界展示马来西亚的绿色创新与文化魅力。
+</p>
+    </div>
+  </div>
+</section>
+
+<section class="section final">
+  <h1>Thanks</h1>
+  <button onclick="window.location.href='https://google.com'">Rate</button>
+</section>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* HERO ANIMATION */
+gsap.to(".hero-text", { opacity:1, y:-20, duration:1.5, ease:"power3.out" });
+
+/* 3D MODEL REVEAL */
+gsap.to("#model", {
+  opacity:1,
+  scrollTrigger:{ trigger:"#model", start:"top 80%" }
+});
+
+/* MAIN TIMELINE */
+let tl = gsap.timeline({
+  scrollTrigger:{
+    trigger:"#triggerPoint",
+    start:"top top",
+    end:"+=3000",
+    scrub:1.5,
+    pin:true,
+    // THE FIX: Toggle visibility based on whether the trigger is active
+    onToggle: self => {
+      gsap.set("#carGroup", { visibility: self.isActive ? "visible" : "hidden" });
+      gsap.set("#text", { visibility: self.isActive ? "visible" : "hidden" });
+    }
+  }
+});
+
+/* CAR ENTER */
+tl.to("#carGroup", { autoAlpha: 1, duration: 0.1 }); // Immediate reveal inside the active trigger
+tl.to("#carGroup", { right:"50%", x:"50%", duration:2, ease:"power4.out" });
+
+/* FLY IMAGE REVEAL */
+tl.to("#fly", { opacity:1, scale:0.5, duration:1.5, ease:"back.out(1.7)" }, "-=1");
+
+/* MOVE TO SIDE */
+tl.to("#carGroup", { left:"5%", right:"auto", x:0, duration:2, ease:"power3.inOut" });
+
+/* TEXT REVEAL */
+tl.to("#text", { opacity:1, x:0, autoAlpha: 1, duration:1.5 }, "-=1");
+
+/* EXIT STAGE LEFT */
+tl.to("#carGroup", { left:"-400px", duration:2, ease:"power4.in" });
+
+/* TEXT HIDE ON EXIT */
+tl.to("#text", { opacity: 0, duration: 1 }, "-=2");
+</script>
+
+</body>
+</html>
